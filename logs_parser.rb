@@ -2,8 +2,10 @@
 
 require 'time'
 
-SENT_REGEX = /., \[(.*) #[0-9]*\].*(SENT).*reply_to":"(.*?)"/
+#SENT_REGEX = /., \[(.*) #[0-9]*\].*(SENT).*reply_to":"(.*?)"/
+SENT_REGEX = /., \[(.*) #[0-9]*\].*(SENT).*"method":"(.*?)",.*reply_to":"(.*?)"/
 RECEIVED_REGEX = /., \[(.*) #[0-9]*\].*(RECEIVED): (.*?) .*/
+#RECEIVED_REGEX = /., \[(.*) #[0-9]*\].(.).*(RECEIVED): (.*?) .*/
 DATETIME_FORMAT = "%FT%H:%M:%S.%L"
 
 messages = {}
@@ -18,27 +20,37 @@ File.readlines(debug_file_path).each do |line|
   matches = line.match(SENT_REGEX) || line.match(RECEIVED_REGEX)
 
   if matches
-    time = Time.parse(matches[1])
-    type = matches[2]
-    subject = matches[3]
-
-    if type == "SENT"
-      total_sent += 1
-      open_sent += 1
-
-      messages[subject] = { req_id: subject, 
-                            timestamp: time, 
-                            total_sent: total_sent, 
-                            open_sent: open_sent }
-    #received
+    if line.match(SENT_REGEX)
+      time = Time.parse(matches[1])
+      type = matches[2]
+      method = matches[3]
+      subject = matches[4]
     else
-      unless messages[subject].nil?
-        # if messages[subject][:duration].nil?
-        open_sent -= 1
-        total_received += 1
-        # end
-        messages[subject][:duration] = ((time - messages[subject][:timestamp]) * 1000).to_i
-        messages[subject][:total_received] = total_received
+      time = Time.parse(matches[1])
+      type = matches[2]
+      method = 'not_ping'
+      subject = matches[3]
+    end
+
+    if method != 'ping'
+      if type == "SENT"
+        total_sent += 1
+        open_sent += 1
+
+        messages[subject] = { req_id: subject,
+            timestamp: time,
+            total_sent: total_sent,
+            open_sent: open_sent }
+        #received
+      else
+        unless messages[subject].nil?
+          # if messages[subject][:duration].nil?
+          open_sent -= 1
+          total_received += 1
+          # end
+          messages[subject][:duration] = ((time - messages[subject][:timestamp]) * 1000).to_i
+          messages[subject][:total_received] = total_received
+        end
       end
     end
   end
