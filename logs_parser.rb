@@ -12,7 +12,9 @@ open_sent = 0
 total_sent = 0
 total_received = 0
 
-File.readlines('task.debug').each do |line|
+debug_file_path = ARGV[0]
+
+File.readlines(debug_file_path).each do |line|
   matches = line.match(SENT_REGEX) || line.match(RECEIVED_REGEX)
 
   if matches
@@ -24,17 +26,17 @@ File.readlines('task.debug').each do |line|
       total_sent += 1
       open_sent += 1
 
-      messages[subject] = { timestamp: time }
-      messages[subject][:req_id] = subject
-      messages[subject][:total_sent] = total_sent
-      messages[subject][:open_sent] = open_sent
+      messages[subject] = { req_id: subject, 
+                            timestamp: time, 
+                            total_sent: total_sent, 
+                            open_sent: open_sent }
     #received
     else
       unless messages[subject].nil?
-        if messages[subject][:duration] == nil
-          open_sent -= 1
-          total_received += 1
-        end
+        # if messages[subject][:duration].nil?
+        open_sent -= 1
+        total_received += 1
+        # end
         messages[subject][:duration] = ((time - messages[subject][:timestamp]) * 1000).to_i
         messages[subject][:total_received] = total_received
       end
@@ -61,3 +63,5 @@ file_dropped.write "timestamp,count\n"
 dropped_messages.each do |key, value|
   file_dropped.write "#{key.strftime(DATETIME_FORMAT)},#{value}\n"
 end
+
+exec("Rscript plot.R messages.csv dropped_messages.csv #{debug_file_path}.pdf")
