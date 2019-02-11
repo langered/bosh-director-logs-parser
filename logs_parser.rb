@@ -69,11 +69,15 @@ messages.values.each do |elem|
   end
 end
 
+file.close
+
 file_dropped = File.open("dropped_messages.csv", 'w')
 file_dropped.write "timestamp,count\n"
 
 dropped_messages.each do |key, value|
   file_dropped.write "#{key.strftime(DATETIME_FORMAT)},#{value}\n"
 end
+
+file_dropped.close
 
 exec("Rscript plot.R messages.csv dropped_messages.csv #{debug_file_path}.pdf")
