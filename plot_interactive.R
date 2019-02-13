@@ -9,8 +9,8 @@ data$timestamp <- as.POSIXct(data$timestamp, format = "%Y-%m-%dT%H:%M:%OS")
 dropped_messages <- read.csv(file = args[2], header = TRUE, sep = ",")
 dropped_messages$timestamp = as.POSIXct(dropped_messages$timestamp, format = "%Y-%m-%dT%H:%M:%OS")
 
-dropped_msg <- plot_ly(dropped_messages, x = ~dropped_messages$timestamp, y = ~dropped_messages$count, type = "bar", showlegend = F)
-dropped_msg <- layout(dropped_msg, yaxis = list(title = "# of dropped messages per 15s"), xaxis = list(title = "time"))
+dropped_msg <- plot_ly(dropped_messages, x = ~dropped_messages$timestamp, y = ~dropped_messages$count, type = "scatter", mode = "markers", showlegend = F)
+dropped_msg <- layout(dropped_msg, yaxis = list(title = "total # of dropped messages"), xaxis = list(title = "time"))
 
 duration <- plot_ly(data, x = ~data$timestamp, y = ~data$duration, color = ~data$method, type = "scatter", mode = "markers", legendgroup =~ data$method)
 duration <- layout(duration, yaxis = list(title = "duration [ms]"), xaxis = list(title = "time"))
