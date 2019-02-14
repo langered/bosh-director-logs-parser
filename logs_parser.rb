@@ -2,22 +2,6 @@
 
 require 'time'
 
-class Time
-  def round_to_seconds(sec=1)
-    down = self - (self.to_i % sec)
-    up = down + sec
-
-    difference_down = self - down
-    difference_up = up - self
-
-    if (difference_down < difference_up)
-      return down
-    else
-      return up
-    end
-  end
-end
-
 SENT_REGEX = /., \[(.*) #[0-9]*\].*(SENT).*"method":"(.*?)",.*reply_to":"(.*?)"/
 RECEIVED_REGEX = /., \[(.*) #[0-9]*\].*(RECEIVED): (.*?) .*/
 
