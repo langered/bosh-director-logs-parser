@@ -21,7 +21,7 @@ Those metrics are stored in `messages.csv` and `dropped_messages.csv`.
 ## Visualization
 
 The `csv` files are visualized with [Plotly R](https://plot.ly/r/) which
-generates an `html` file with four diagrams:
+generates an `html` page with four diagrams:
 
 * duration in ms per message
 * total number of sent messages over time
@@ -30,8 +30,11 @@ generates an `html` file with four diagrams:
 
 ## Installing and Executing
 
-To analyze a debug log file run the ruby script as follows:
-`./log_parser.rb <abs. path to debug log file>`
+To analyze a debug log file run the ruby script as follows:  
+`./log_parser.rb [options] <abs. path to debug log file>`
 
-It generates a single, self-contained `html` which can be shared.
+Available options are:  
+`--filter FILTER    Provide a regex to filter out NATS methods, e.g. 'ping|get_state'`
+
+It generates a `html` plus some JavaScript files which can be shared.
 The file has the name of the debug log + `.html`.

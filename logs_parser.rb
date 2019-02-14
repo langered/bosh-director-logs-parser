@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'time'
+require 'optparse'
 
 SENT_REGEX = /., \[(.*) #[0-9]*\].*(SENT).*"method":"(.*?)",.*reply_to":"(.*?)"/
 RECEIVED_REGEX = /., \[(.*) #[0-9]*\].*(RECEIVED): (.*?) .*/
@@ -11,7 +12,12 @@ total_sent = 0
 total_received = 0
 dropped_messages = 0
 
+options = {}
 debug_file_path = ARGV[0]
+OptionParser.new do |opt|
+  opt.banner = "Usage: \n logs_parser.rb [options] <path to log file>"
+  opt.on('--filter FILTER', 'Provide a regex to filter out NATS methods, e.g. \'ping|get_state\'' ) { |o| options[:filter] = o }
+end.parse!
 
 File.readlines(debug_file_path).each do |line|
   case line
@@ -21,7 +27,7 @@ File.readlines(debug_file_path).each do |line|
     method = $3
     subject = $4
 
-    unless method == 'ping'
+    unless options[:filter] && method.match(options[:filter])
       total_sent += 1
       open_sent[method] ||= 0
       open_sent[method] += 1
@@ -37,7 +43,7 @@ File.readlines(debug_file_path).each do |line|
     type = $2
     subject = $3
 
-    unless messages[subject].nil? || messages[subject][:method] == 'ping'
+    unless messages[subject].nil? || options[:filter] && messages[subject][:method].match(options[:filter])
       raise error("Multiple 'RECEIVED' for the same NATS subject: #{messages[subject]}") if messages[subject][:duration]
 
       total_received += 1
