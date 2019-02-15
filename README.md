@@ -28,7 +28,17 @@ generates an `html` page with four diagrams:
 * number of open messages over time per method type
 * total number of dropped messages over time
 
-## Installing and Executing
+## Requirements
+
+* Ruby installed
+
+* R installed
+    * For mac execute `brew install r`
+    * For other operating systems, follow the instructions on the [R project website](https://cran.r-project.org/)
+
+[RStudio](https://www.rstudio.com) is a recommended for editing R-files but it is not needed to execute this script.
+
+## Executing
 
 To analyze a debug log file run the ruby script as follows:  
 `./log_parser.rb [options] <abs. path to debug log file>`
@@ -36,5 +46,5 @@ To analyze a debug log file run the ruby script as follows:
 Available options are:  
 `--filter FILTER    Provide a regex to filter out NATS methods, e.g. 'ping|get_state'`
 
-It generates a `html` plus some JavaScript files which can be shared.
-The file has the name of the debug log + `.html`.
+It generates a self-contained `html` file which can be shared.
+The file has the name of the debug log + `.html` and is stored next to it in the same directory.
