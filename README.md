@@ -40,10 +40,10 @@ generates an `html` page with four diagrams:
 
 ## Executing
 
-To analyze a debug log file run the ruby script as follows:  
-`./log_parser.rb [options] <abs. path to debug log file>`
+To analyze a debug log file run the ruby script as follows:
+`./log_parser.rb [options] <absolute path to debug log file>`
 
-Available options are:  
+Available options are:
 `--filter FILTER    Provide a regex to filter out NATS methods, e.g. 'ping|get_state'`
 
 It generates a self-contained `html` file which can be shared.
