@@ -73,4 +73,4 @@ end
 file.close
 file_dropped.close
 
-exec("Rscript plot_interactive.R messages.csv dropped_messages.csv #{debug_file_path}.html; open #{debug_file_path}.html")
+exec("Rscript plot_interactive.R messages.csv dropped_messages.csv #{debug_file_path}.html")

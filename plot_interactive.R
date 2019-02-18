@@ -1,6 +1,5 @@
-if(!require(plotly, warn.conflicts = FALSE)) {
-  install.packages("plotly", repos = "http://cran.us.r-project.org")
-}
+library(plotly, warn.conflicts = FALSE)
+
 args <- commandArgs(trailingOnly = TRUE)
 
 data <- read.csv(file = args[1], header = TRUE, sep = ",")

@@ -29,6 +29,7 @@ generates an `html` page with four diagrams:
 * total number of dropped messages over time
 
 ## Requirements
+Because a Docker image of this application exist, you can run the dockerized version of this without installing any requirements. The following requirements are only needed when executing and editing locally:
 
 * Ruby installed
 
@@ -39,9 +40,14 @@ generates an `html` page with four diagrams:
 [RStudio](https://www.rstudio.com) is a recommended for editing R-files but it is not needed to execute this script.
 
 ## Executing
+### Docker
+Execute the shell script as follows:
+`./analyze <absolute path to debug log file> [options]`
+
+### Local
 
 To analyze a debug log file run the ruby script as follows:
-`./log_parser.rb [options] <absolute path to debug log file>`
+`./log_parser.rb <absolute path to debug log file> [options]`
 
 Available options are:
 `--filter FILTER    Provide a regex to filter out NATS methods, e.g. 'ping|get_state'`
