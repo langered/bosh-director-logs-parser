@@ -41,15 +41,15 @@ Because a Docker image of this application exist, you can run the dockerized ver
 
 ## Executing
 ### Docker
-Execute the shell script as follows:
+Execute the shell script as follows: <br/>
 `./analyze <absolute path to debug log file> [options]`
 
 ### Local
 
-To analyze a debug log file run the ruby script as follows:
+To analyze a debug log file run the ruby script as follows: <br/>
 `./log_parser.rb <absolute path to debug log file> [options]`
 
-Available options are:
+Available options are: <br/>
 `--filter FILTER    Provide a regex to filter out NATS methods, e.g. 'ping|get_state'`
 
 It generates a self-contained `html` file which can be shared.
