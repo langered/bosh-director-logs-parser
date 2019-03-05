@@ -1,13 +1,17 @@
 #!/bin/bash
 
+set -euo pipefail
+
 DEBUG_LOG_FILE_PATH=$1
 DEBUG_LOG_FILE_NAME=$(basename "$DEBUG_LOG_FILE_PATH")
-DEBUG_LOG_DIR_PATH=$(dirname "$DEBUG_LOG_FILE_PATH")
+DEBUG_LOG_DIR_PATH="$( cd "$( dirname "$DEBUG_LOG_FILE_PATH" )" >/dev/null 2>&1 && pwd )"
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 shift
 
 docker pull langered/bosh-director-logs-parser
-docker run --rm -itv "$DEBUG_LOG_DIR_PATH":/usr/src/bosh-director-logs-parser/logs langered/bosh-director-logs-parser:latest "/usr/src/bosh-director-logs-parser/logs/$DEBUG_LOG_FILE_NAME" "$@"
+echo docker run --rm -it -v "$SCRIPT_DIR":/usr/src/bosh-director-logs-parser -v "$DEBUG_LOG_DIR_PATH":/logs langered/bosh-director-logs-parser:latest "/logs/$DEBUG_LOG_FILE_NAME" "$@"
 
 rm -rf "$DEBUG_LOG_FILE_PATH"_files
 open "$DEBUG_LOG_FILE_PATH".html
