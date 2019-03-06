@@ -13,11 +13,13 @@ total_received = 0
 dropped_messages = 0
 
 options = {}
-debug_file_path = ARGV[0]
+
 OptionParser.new do |opt|
   opt.banner = "Usage: \n logs_parser.rb [options] <absolute path to log file>"
   opt.on('--filter FILTER', 'Provide a regex to filter out NATS methods, e.g. \'ping|get_state\'' ) { |o| options[:filter] = o }
 end.parse!
+
+debug_file_path = ARGV[0]
 
 File.readlines(debug_file_path).each do |line|
   case line
