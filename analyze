@@ -1,0 +1,42 @@
+#!/bin/bash
+
+set -euo pipefail
+
+function printHelp {
+  echo "Usage:"
+  echo "   ./analyze <absolute path to log file> [options]"
+  echo ""
+  echo "Options:"
+  echo "  --filter  Provide a regex to filter out NATS methods, e.g. 'ping|get_state'"
+}
+
+SCRIPT_ARGUMENTS=()
+while [[ $# -gt 0 ]]
+do
+	case $1 in
+		-h|--help)
+			printHelp
+			exit 0
+			;;
+		*)
+			SCRIPT_ARGUMENTS+=("$1")
+			shift
+			;;
+	esac
+done
+
+set -- "${SCRIPT_ARGUMENTS[@]}"
+
+DEBUG_LOG_FILE_PATH=$1
+DEBUG_LOG_FILE_NAME=$(basename "$DEBUG_LOG_FILE_PATH")
+DEBUG_LOG_DIR_PATH="$( cd "$( dirname "$DEBUG_LOG_FILE_PATH" )" >/dev/null 2>&1 && pwd )"
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+shift
+
+docker pull langered/bosh-director-logs-parser
+(set -x; docker run --rm -it -v "$SCRIPT_DIR":/usr/src/bosh-director-logs-parser -v "$DEBUG_LOG_DIR_PATH":/logs langered/bosh-director-logs-parser:latest "/logs/$DEBUG_LOG_FILE_NAME" "$@")
+
+rm -rf "$DEBUG_LOG_FILE_PATH"_files
+open "$DEBUG_LOG_FILE_PATH".html

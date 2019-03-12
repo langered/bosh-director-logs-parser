@@ -44,7 +44,7 @@ File.readlines(debug_file_path).each do |line|
     subject = $3
 
     unless messages[subject].nil? || options[:filter] && messages[subject][:method].match(options[:filter])
-      raise error("Multiple 'RECEIVED' for the same NATS subject: #{messages[subject]}") if messages[subject][:duration]
+      raise "Multiple 'RECEIVED' for the same NATS subject: #{messages[subject]}" if messages[subject][:duration]
 
       total_received += 1
       open_sent[messages[subject][:method]] -= 1
@@ -73,4 +73,4 @@ end
 file.close
 file_dropped.close
 
-exec("Rscript plot_interactive.R messages.csv dropped_messages.csv #{debug_file_path}.html; open #{debug_file_path}.html")
+exec("Rscript plot_interactive.R messages.csv dropped_messages.csv #{debug_file_path}.html")
