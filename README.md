@@ -61,3 +61,11 @@ Available options are: <br/>
 It generates a self-contained `html` file which can be shared.
 The file has the name of the debug log + `.html` and is stored next to it in the same directory.
 When executing locally, the generated HTML-File must be opened manually
+
+## Known issues
+### Pandoc
+```
+Error: pandoc document conversion failed with error 137
+```
+This error might occur when analyzing large debug files within a docker
+container. This can be solved by increasing the memory resource for docker.
