@@ -61,14 +61,14 @@ file = File.open("messages.csv", 'w')
 file.write "req_id,timestamp,duration,total_sent,open_sent,method\n"
 
 file_dropped = File.open("dropped_messages.csv", 'w')
-file_dropped.write "timestamp,count\n"
+file_dropped.write "req_id,method,timestamp,count\n"
 
 messages.values.each do |elem|
   if elem[:duration]
     file.write "#{elem[:req_id]},#{elem[:timestamp].iso8601(3)},#{elem[:duration]},#{elem[:total_sent]},#{elem[:open_sent]},#{elem[:method]}\n"
   else
     dropped_messages += 1
-    file_dropped.write "#{elem[:timestamp].iso8601(3)},#{dropped_messages}\n"
+    file_dropped.write "#{elem[:req_id]},#{elem[:method]},#{elem[:timestamp].iso8601(3)},#{dropped_messages}\n"
   end
 end
 

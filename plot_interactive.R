@@ -21,7 +21,7 @@ total_amount <- layout(total_amount, yaxis = list(title = "total # of sent", tit
 open_sent <- plot_ly(data, x = ~data$timestamp, y = ~data$open_sent, color = ~data$method, type = "scatter", mode = "markers", colors = "Dark2", legendgroup =~ data$method, showlegend = F)
 open_sent <- layout(open_sent, yaxis = list(title = "open # of sent", titlefont = title_size), xaxis = list(title = "time", type = "date"))
 
-dropped_msg <- plot_ly(dropped_messages, x = ~dropped_messages$timestamp, y = ~dropped_messages$count, type = "scatter", mode = "markers", colors = "Dark2", showlegend = F)
+dropped_msg <- plot_ly(dropped_messages, x = ~dropped_messages$timestamp, y = ~dropped_messages$count, color = ~dropped_messages$method, type = "scatter", mode = "markers", colors = "Dark2", showlegend = F)
 dropped_msg <- layout(dropped_msg, yaxis = list(title = "total # of dropped messages", titlefont = title_size), xaxis = list(title = "time"))
 
 html <- subplot(duration, total_amount, open_sent, dropped_msg, shareX = TRUE, titleY = TRUE, nrows = 4)
